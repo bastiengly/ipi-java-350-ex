@@ -8,7 +8,49 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 public class EmployeTest {
-
+	
+	//evaluation
+	
+	@Test
+	public void testAugmentationSalaireSalaireNull() {
+		//given
+		Employe e1 = new Employe();
+		e1.setSalaire(null);
+		//when
+		e1.augmenterSalaire(2.0);
+		//then
+		Assertions.assertThat(e1.getSalaire()).isEqualTo(null);
+	}
+	
+	@Test
+	public void testAugmentationSalaireSalaireAugmentationZero() {
+		//given
+		Employe e1 = new Employe();
+		e1.setSalaire(1000.0);
+		//when
+		e1.augmenterSalaire(0.0);
+		//then
+		Assertions.assertThat(e1.getSalaire()).isEqualTo(1000.0);
+	}
+	
+	@Test
+	public void testAugmentationSalaireSalaireAugmentation() {
+		//given
+		Employe e1 = new Employe();
+		e1.setSalaire(1000.0);
+		//when
+		e1.augmenterSalaire(1.0);
+		//then
+		Assertions.assertThat(e1.getSalaire()).isEqualTo(2000.0);
+	}
+	//Le TDD permet ma permis d'identifier les cas null avant de dev la fonction
+	
+	
+	
+	
+	
+	//evaluation
+	/*
 	@Test
 	public void testNombreAnneesAnciennetesMoins2 () {
 		
@@ -75,7 +117,7 @@ public class EmployeTest {
 		e1.setTempsPartiel(tempsPartiel);
 		Assertions.assertThat(e1.getPrimeAnnuelle()).isEqualTo(Result);
 		
-	}
+	}*/
 	
 
 }

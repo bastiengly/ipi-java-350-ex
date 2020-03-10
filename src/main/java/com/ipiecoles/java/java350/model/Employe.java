@@ -61,7 +61,7 @@ public class Employe {
 
     public Integer getNbRtt(LocalDate d){
         int i1 = d.isLeapYear() ? 365 : 366;
-        int var = 104;
+        int var = 104;//repos hebdomadaire 
         switch (LocalDate.of(d.getYear(),1,1).getDayOfWeek()){
             case THURSDAY: if(d.isLeapYear()) var =  var + 1; break;
             case FRIDAY: if(d.isLeapYear()) var =  var + 2; else var =  var + 1;
@@ -107,7 +107,11 @@ public class Employe {
     }
 
     //Augmenter salaire
-    //public void augmenterSalaire(double pourcentage){}
+    public void augmenterSalaire(double pourcentage){
+    	if(this.getSalaire()!=null) {
+    		this.salaire = this.getSalaire() * (1 + pourcentage);
+    	}
+    }
 
     public Long getId() {
         return id;
