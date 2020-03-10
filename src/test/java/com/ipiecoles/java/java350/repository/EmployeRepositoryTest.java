@@ -1,6 +1,8 @@
 package com.ipiecoles.java.java350.repository;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +18,27 @@ public class EmployeRepositoryTest {
 	@Autowired
 	EmployeRepository employeRepository;
 	
+	@BeforeEach
+	@AfterAll
+	public void setup() {
+		employeRepository.deleteAll();
+	}
+	
+	@Test
+	public void testFindMaxMatriculeEmpty() {
+		//given
+
+		//when
+		String result = employeRepository.findLastMatricule();
+		//then
+		Assertions.assertThat(result).isNull();
+	}
+	
 	@Test
 	public void testFindMaxMatricule() {
 		//given
 		Employe emp1 = new Employe();
-		emp1.setMatricule("M12345");
+		emp1.setMatricule("T12345");
 		employeRepository.save(emp1);
 		Employe emp2 = new Employe();
 		emp2.setMatricule("M33333");
@@ -31,4 +49,6 @@ public class EmployeRepositoryTest {
 		Assertions.assertThat(result).isEqualTo("33333");
 	}
 
+	
+	
 }
