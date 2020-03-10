@@ -23,6 +23,34 @@ public class EmployeRepositoryTest {
 		employeRepository.deleteAll();
 	}
 	
+	
+	//evaluation
+	@Test
+	public void testAvgPerformanceWhereMatriculeStartsWith() {
+		//given
+		Employe emp1 = new Employe();
+		emp1.setMatricule("C12345");
+		emp1.setPerformance(10);
+		employeRepository.save(emp1);
+		Employe emp2 = new Employe();
+		emp2.setMatricule("C33333");
+		emp2.setPerformance(5);
+		employeRepository.save(emp2);
+		//when
+		Double result = employeRepository.avgPerformanceWhereMatriculeStartsWith("C");
+		//then
+		Assertions.assertThat(result).isEqualTo(7.5);
+	}
+	
+	
+	
+	
+	
+	
+	//evaluation
+	
+	
+	/*
 	@Test
 	public void testFindMaxMatriculeEmpty() {
 		//given
@@ -46,7 +74,7 @@ public class EmployeRepositoryTest {
 		String result = employeRepository.findLastMatricule();
 		//then
 		Assertions.assertThat(result).isEqualTo("33333");
-	}
+	}*/
 
 	
 	
