@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ipiecoles.java.java350.exception.EmployeException;
 import com.ipiecoles.java.java350.model.Employe;
+import com.ipiecoles.java.java350.model.Entreprise;
 import com.ipiecoles.java.java350.model.NiveauEtude;
 import com.ipiecoles.java.java350.model.Poste;
 import com.ipiecoles.java.java350.repository.EmployeRepository;
@@ -47,7 +48,31 @@ public class EmployeServiceTest {
 		Assertions.assertThat(empCaptor.getValue().getPrenom()).isEqualTo("Jean");
 		Assertions.assertThat(empCaptor.getValue().getTempsPartiel()).isEqualTo(1.0);
 		Assertions.assertThat(empCaptor.getValue().getDateEmbauche().getYear()).isEqualTo(2020);
+		Assertions.assertThat(empCaptor.getValue().getPerformance()).isEqualTo(Entreprise.PERFORMANCE_BASE);
 		
+		Assertions.assertThat(empCaptor.getValue().getSalaire()).isEqualTo(2129.71);
+	}
+	
+	
+	@Test
+	public void EmbaucheEmployeTestMatriculeNull() throws EntityExistsException, EmployeException {
+		//given
+		empRepo.deleteAll();
+		Mockito.when(empRepo.findLastMatricule()).thenReturn(null);
+		Mockito.when(empRepo.findByMatricule("C00001")).thenReturn(null);
+		//when
+		empService.embaucheEmploye("Jean", "Jean", Poste.COMMERCIAL, NiveauEtude.MASTER, 1.0);
+		//then
+		ArgumentCaptor<Employe> empCaptor = ArgumentCaptor.forClass(Employe.class);
+		Mockito.verify(empRepo, Mockito.times(1)).save(empCaptor.capture());
+		Assertions.assertThat(empCaptor.getValue().getMatricule()).isEqualTo("C00001");
+		Assertions.assertThat(empCaptor.getValue().getNom()).isEqualTo("Jean");
+		Assertions.assertThat(empCaptor.getValue().getPrenom()).isEqualTo("Jean");
+		Assertions.assertThat(empCaptor.getValue().getTempsPartiel()).isEqualTo(1.0);
+		Assertions.assertThat(empCaptor.getValue().getDateEmbauche().getYear()).isEqualTo(2020);
+		Assertions.assertThat(empCaptor.getValue().getPerformance()).isEqualTo(Entreprise.PERFORMANCE_BASE);
+		
+		Assertions.assertThat(empCaptor.getValue().getSalaire()).isEqualTo(2129.71);
 	}
 
 }
