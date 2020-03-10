@@ -74,5 +74,23 @@ public class EmployeServiceTest {
 		
 		Assertions.assertThat(empCaptor.getValue().getSalaire()).isEqualTo(2129.71);
 	}
+	
+
+	@Test
+	public void TestLimiteMatriculeEmbaucheEmploye() throws EntityExistsException, EmployeException {
+		//given
+		empRepo.deleteAll();
+		Mockito.when(empRepo.findLastMatricule()).thenReturn("99999");
+		//when
+		try {
+			empService.embaucheEmploye("Jean", "Jean", Poste.COMMERCIAL, NiveauEtude.MASTER, 1.0);
+			Assertions.fail("YA UNE ERREUR ICI NORMALEMENT");
+		}catch(Exception e) {
+			//then
+			Assertions.assertThat(e).isInstanceOf(EmployeException.class);
+			Assertions.assertThat(e.getMessage()).isEqualTo("Limite des 100000 matricules atteinte !");
+		}
+		
+	}
 
 }
