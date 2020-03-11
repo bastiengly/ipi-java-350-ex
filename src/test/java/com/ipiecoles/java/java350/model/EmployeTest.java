@@ -45,7 +45,31 @@ public class EmployeTest {
 	}
 	//Le TDD permet ma permis d'identifier les cas null avant de dev la fonction
 	
-	
+
+	@ParameterizedTest
+	@CsvSource({
+		"-1, 8",
+		"1, 11",
+		"2, 10",
+		"12, 12"
+		})
+	public void testGetNbRTT(Integer Annee, Integer result) {
+		//given
+		LocalDate dateRTT;
+		if(Annee<0) {
+			dateRTT = LocalDate.now().minusYears(Math.abs(Annee));
+		}else if(Annee>0) {
+			dateRTT = LocalDate.now().plusYears(Annee);
+		}else {
+			dateRTT = LocalDate.now();
+		}
+		Employe e1 = new Employe();
+		e1.setTempsPartiel(1d);
+		//when
+		Integer resultat = e1.getNbRtt(dateRTT);
+		//then
+		Assertions.assertThat(resultat).isEqualTo(result);
+	}
 	
 	
 	

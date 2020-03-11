@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.ipiecoles.java.java350.exception.EmployeException;
 import com.ipiecoles.java.java350.model.Employe;
+import com.ipiecoles.java.java350.service.EmployeService;
 
 @ExtendWith(SpringExtension.class) //Junit 5 
 @SpringBootTest
@@ -17,6 +19,8 @@ public class EmployeRepositoryTest {
 
 	@Autowired
 	EmployeRepository employeRepository;
+	
+	EmployeService employeService;
 	
 	@BeforeEach
 	public void setup() {
@@ -42,6 +46,20 @@ public class EmployeRepositoryTest {
 		Assertions.assertThat(result).isEqualTo(7.5);
 	}
 	
+	
+	@Test
+	public void testCalculPerformanceCommercialIntegrated() throws EmployeException {
+		//given
+		Employe e1 = new Employe();
+		e1.setMatricule("C12345");
+		e1.setPerformance(5);
+		employeRepository.save(e1);
+		//when
+		employeService.calculPerformanceCommercial("C12345", 85l, 100l);
+		//then
+		Assertions.assertThat(employeRepository.findByMatricule("C12345")).isEqualTo(4);
+		
+	}
 	
 	
 	

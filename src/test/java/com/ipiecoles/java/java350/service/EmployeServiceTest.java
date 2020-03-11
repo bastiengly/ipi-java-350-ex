@@ -139,19 +139,7 @@ public class EmployeServiceTest {
 		Assertions.assertThat(empCaptor.getValue().getPerformance()).isEqualTo(result);
 	}
 	
-	@Test
-	public void testCalculPerformanceCommercialIntegrated() throws EmployeException {
-		//given
-		Employe e1 = new Employe();
-		e1.setMatricule("C12345");
-		e1.setPerformance(5);
-		empRepoNotMocked.save(e1);
-		//when
-		empServiceNotMocked.calculPerformanceCommercial("C12345", 85l, 100l);
-		//then
-		Assertions.assertThat(empRepoNotMocked.findByMatricule("C12345")).isEqualTo(4);
-		
-	}
+	
 	
 	
 	
