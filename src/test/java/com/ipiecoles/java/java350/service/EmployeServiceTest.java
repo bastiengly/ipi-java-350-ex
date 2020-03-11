@@ -18,7 +18,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.google.protobuf.Any;
 import com.ipiecoles.java.java350.exception.EmployeException;
 import com.ipiecoles.java.java350.model.Employe;
 import com.ipiecoles.java.java350.model.Entreprise;
@@ -26,7 +28,11 @@ import com.ipiecoles.java.java350.model.NiveauEtude;
 import com.ipiecoles.java.java350.model.Poste;
 import com.ipiecoles.java.java350.repository.EmployeRepository;
 
+import static org.mockito.ArgumentMatchers.*;
+
 @ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class) //Junit 5 
+@SpringBootTest
 public class EmployeServiceTest {
 	
 	@Mock
@@ -142,6 +148,35 @@ public class EmployeServiceTest {
 	
 	//Test Integration Bloquer car le Repository instancié dans EmployeService n'est pas le Repository "SpringBootTest"
 	//La création de base ne fonctionne pas
+	
+	//On mock les findByMatricule et avgPerformanceWhereMatriculeStartsWith du repository du service appelé avec le vrai repository SpringBootTest
+	//Ainsi le service tourne sur les valeurs présentes en mémoire
+	@Test
+	public void testIntegrationCalculPerformanceCommercial() throws EmployeException {
+		//given
+		Employe e1 = new Employe();
+		e1.setMatricule("C12345");
+		e1.setPerformance(5);
+		empRepoNotMocked.save(e1);
+		Employe e2 = new Employe();
+		e2.setMatricule("C12346");
+		e2.setPerformance(5);
+		empRepoNotMocked.save(e2);
+		Employe e3 = new Employe();
+		e3.setMatricule("C12347");
+		e3.setPerformance(15);
+		empRepoNotMocked.save(e3);
+		Mockito.when(empRepo.findByMatricule("C12345")).thenReturn(empRepoNotMocked.findByMatricule("C12345"));
+		Mockito.when(empRepo.avgPerformanceWhereMatriculeStartsWith("C")).thenReturn(empRepoNotMocked.avgPerformanceWhereMatriculeStartsWith("C"));
+		//when
+		empService.calculPerformanceCommercial("C12345", 130l, 100l);
+		//then
+		ArgumentCaptor<Employe> empCaptor = ArgumentCaptor.forClass(Employe.class);
+		Mockito.verify(empRepo, Mockito.times(1)).save(empCaptor.capture());
+		Assertions.assertThat(empCaptor.getValue().getPerformance()).isEqualTo(10);
+	}
+	
+	
 	
 	
 	//evaluation
