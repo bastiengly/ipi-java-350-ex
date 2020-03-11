@@ -133,7 +133,6 @@ public class EmployeService {
         if(performanceMoyenne != null && performance > performanceMoyenne){
             performance++;
         }
-
         //Affectation et sauvegarde
         employe.setPerformance(performance);
         employeRepository.save(employe);
